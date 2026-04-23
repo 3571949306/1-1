@@ -1,0 +1,452 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>我的个人网站</title>
+  <style>
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+    body {
+      font-family: 'Microsoft YaHei', 'Segoe UI', sans-serif;
+      line-height: 1.8;
+      color: #333;
+      background: #f5f5f5;
+    }
+    
+    /* 导航栏 */
+    header {
+      background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+      padding: 0 50px;
+      position: sticky;
+      top: 0;
+      z-index: 100;
+      box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+    }
+    nav {
+      max-width: 1200px;
+      margin: 0 auto;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      height: 60px;
+    }
+    .logo {
+      color: #fff;
+      font-size: 1.5rem;
+      font-weight: bold;
+      text-decoration: none;
+    }
+    .nav-links {
+      display: flex;
+      list-style: none;
+      gap: 30px;
+    }
+    .nav-links a {
+      color: #fff;
+      text-decoration: none;
+      padding: 10px 0;
+      transition: all 0.3s;
+    }
+    .nav-links a:hover {
+      opacity: 0.8;
+    }
+    
+    /* 主体区域 */
+    .container {
+      max-width: 1200px;
+      margin: 0 auto;
+      padding: 40px 20px;
+      display: grid;
+      grid-template-columns: 1fr 300px;
+      gap: 30px;
+    }
+    
+    /* 主要内容 */
+    main {
+      background: #fff;
+      border-radius: 10px;
+      padding: 40px;
+      box-shadow: 0 2px 10px rgba(0,0,0,0.05);
+    }
+    .article {
+      margin-bottom: 40px;
+    }
+    .article h2 {
+      color: #667eea;
+      font-size: 1.8rem;
+      margin-bottom: 15px;
+      padding-bottom: 10px;
+      border-bottom: 2px solid #667eea;
+    }
+    .article p {
+      margin-bottom: 15px;
+      text-align: justify;
+    }
+    .article ul {
+      margin: 15px 0;
+      padding-left: 30px;
+    }
+    .article li {
+      margin-bottom: 10px;
+    }
+    
+    /* 侧边栏 */
+    aside {
+      display: flex;
+      flex-direction: column;
+      gap: 20px;
+    }
+    .sidebar-box {
+      background: #fff;
+      border-radius: 10px;
+      padding: 25px;
+      box-shadow: 0 2px 10px rgba(0,0,0,0.05);
+    }
+    .sidebar-box h3 {
+      color: #333;
+      font-size: 1.2rem;
+      margin-bottom: 15px;
+      padding-bottom: 10px;
+      border-bottom: 2px solid #667eea;
+    }
+    .profile-img {
+      width: 100px;
+      height: 100px;
+      border-radius: 50%;
+      background: linear-gradient(135deg, #667eea, #764ba2);
+      margin: 0 auto 15px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      color: #fff;
+      font-size: 2rem;
+    }
+    .profile-info {
+      text-align: center;
+    }
+    .profile-info h4 {
+      margin-bottom: 5px;
+    }
+    .profile-info p {
+      color: #666;
+      font-size: 0.9rem;
+    }
+    .tags {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 8px;
+    }
+    .tag {
+      background: #f0f0f0;
+      padding: 5px 15px;
+      border-radius: 20px;
+      font-size: 0.85rem;
+      color: #666;
+    }
+    .links-list {
+      list-style: none;
+    }
+    .links-list li {
+      padding: 10px 0;
+      border-bottom: 1px solid #eee;
+    }
+    .links-list a {
+      color: #667eea;
+      text-decoration: none;
+    }
+    .links-list a:hover {
+      text-decoration: underline;
+    }
+    
+    /* 页脚 */
+    footer {
+      background: #333;
+      color: #fff;
+      text-align: center;
+      padding: 30px;
+      margin-top: 40px;
+    }
+    footer p {
+      margin: 5px 0;
+    }
+    footer a {
+      color: #667eea;
+      text-decoration: none;
+    }
+    
+    /* 右下角五子棋游戏容器 */
+    .gomoku-widget {
+      position: fixed;
+      bottom: 20px;
+      right: 20px;
+      z-index: 1000;
+    }
+    .gomoku-toggle {
+      width: 60px;
+      height: 60px;
+      background: linear-gradient(135deg, #667eea, #764ba2);
+      border: none;
+      border-radius: 50%;
+      color: #fff;
+      font-size: 1.5rem;
+      cursor: pointer;
+      box-shadow: 0 4px 10px rgba(0,0,0,0.3);
+      transition: all 0.3s;
+    }
+    .gomoku-toggle:hover {
+      transform: scale(1.1);
+    }
+    .gomoku-panel {
+      position: absolute;
+      bottom: 70px;
+      right: 0;
+      width: 520px;
+      background: #fff;
+      border-radius: 15px;
+      box-shadow: 0 10px 40px rgba(0,0,0,0.2);
+      display: none;
+      overflow: hidden;
+    }
+    .gomoku-panel.show {
+      display: block;
+    }
+    .gomoku-header {
+      background: linear-gradient(135deg, #2c1810, #1a0f0a);
+      color: #d4a574;
+      padding: 15px 20px;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+    }
+    .gomoku-header h4 {
+      margin: 0;
+    }
+    .gomoku-close {
+      background: none;
+      border: none;
+      color: #d4a574;
+      font-size: 1.2rem;
+      cursor: pointer;
+    }
+    .gomoku-content {
+      padding: 15px;
+      background: linear-gradient(145deg, #f5f5f5, #e8e8e8);
+    }
+    .gomoku-info {
+      text-align: center;
+      color: #333;
+      margin-bottom: 10px;
+      font-size: 0.9rem;
+    }
+    #board {
+      display: grid;
+      grid-template-columns: repeat(15, 28px);
+      grid-template-rows: repeat(15, 28px);
+      background: linear-gradient(145deg, #c4a46a, #a08050);
+      border: 3px solid #5c3d2e;
+      margin: 0 auto;
+      width: fit-content;
+    }
+    .cell {
+      width: 28px;
+      height: 28px;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      cursor: pointer;
+      position: relative;
+    }
+    .cell::before {
+      content: '';
+      position: absolute;
+      width: 100%;
+      height: 100%;
+      border: 1px solid rgba(80, 50, 30, 0.3);
+    }
+    .cell:hover {
+      background: rgba(255, 255, 255, 0.15);
+    }
+    .piece {
+      width: 22px;
+      height: 22px;
+      border-radius: 50%;
+      box-shadow: 1px 1px 3px rgba(0,0,0,0.4);
+    }
+    .piece.black {
+      background: radial-gradient(circle at 30% 30%, #555, #111);
+    }
+    .piece.white {
+      background: radial-gradient(circle at 30% 30%, #fff, #ddd);
+    }
+    .gomoku-status {
+      text-align: center;
+      margin-top: 10px;
+      color: #333;
+      font-weight: 500;
+    }
+    .gomoku-btn {
+      display: block;
+      margin: 10px auto 0;
+      padding: 8px 20px;
+      background: linear-gradient(145deg, #667eea, #764ba2);
+      color: #fff;
+      border: none;
+      border-radius: 20px;
+      cursor: pointer;
+      font-size: 0.85rem;
+    }
+    .gomoku-btn:hover {
+      opacity: 0.9;
+    }
+    
+    /* 响应式 */
+    @media (max-width: 768px) {
+      .container {
+        grid-template-columns: 1fr;
+      }
+      .nav-links {
+        display: none;
+      }
+      .gomoku-panel {
+        width: calc(100vw - 40px);
+        right: -10px;
+      }
+      #board {
+        grid-template-columns: repeat(15, 22px);
+        grid-template-rows: repeat(15, 22px);
+      }
+      .cell {
+        width: 22px;
+        height: 22px;
+      }
+      .piece {
+        width: 18px;
+        height: 18px;
+      }
+    }
+  </style>
+</head>
+<body>
+  <!-- 导航栏 -->
+  <header>
+    <nav>
+      <a href="#" class="logo">🎯 我的网站</a>
+      <ul class="nav-links">
+        <li><a href="#home">首页</a></li>
+        <li><a href="#about">关于</a></li>
+        <li><a href="#articles">文章</a></li>
+        <li><a href="#contact">联系</a></li>
+      </ul>
+    </nav>
+  </header>
+
+  <!-- 主要内容 -->
+  <div class="container">
+    <main>
+      <div class="article" id="home">
+        <h2>欢迎来到我的个人网站</h2>
+        <p>这是一个充满创意与技术的个人空间。我热爱编程，喜欢探索新技术，并在业余时间开发各种有趣的项目。</p>
+        <p>在这个网站中，你可以了解到我的兴趣爱好、技术栈、以及我分享的一些文章和教程。</p>
+      </div>
+
+      <div class="article" id="about">
+        <h2>关于我</h2>
+        <p>我是一名软件开发者，专注于 Web 开发和移动应用开发。喜欢研究新技术，包括人工智能、云计算等领域。</p>
+        <p>我的座右铭是：代码改变世界，创意点亮未来。</p>
+        <ul>
+          <li>📚 持续学习新技术</li>
+          <li>💻 热爱开源项目</li>
+          <li>🎮 偶尔也会玩游戏放松</li>
+          <li>📝 喜欢记录学习心得</li>
+        </ul>
+      </div>
+
+      <div class="article" id="articles">
+        <h2>技术文章</h2>
+        <p>在这里我会分享一些技术文章和学习笔记，涵盖前端开发、后端服务、数据库等多个领域。</p>
+        <p>如果你对我的文章感兴趣，欢迎随时来访并提出宝贵意见。</p>
+      </div>
+
+      <div class="article" id="contact">
+        <h2>联系我</h2>
+        <p>如果你有任何问题或者建议，可以通过以下方式联系我：</p>
+        <ul>
+          <li>📧 邮箱：example@email.com</li>
+          <li>💬 GitHub：github.com/example</li>
+          <li>📱 微信：example_wechat</li>
+        </ul>
+      </div>
+    </main>
+
+    <!-- 侧边栏 -->
+    <aside>
+      <div class="sidebar-box">
+        <h3>个人简介</h3>
+        <div class="profile-img">👨‍💻</div>
+        <div class="profile-info">
+          <h4>开发者</h4>
+          <p>热爱编程与技术探索</p>
+        </div>
+      </div>
+
+      <div class="sidebar-box">
+        <h3>技能标签</h3>
+        <div class="tags">
+          <span class="tag">Java</span>
+          <span class="tag">Python</span>
+          <span class="tag">JavaScript</span>
+          <span class="tag">HTML/CSS</span>
+          <span class="tag">React</span>
+          <span class="tag">Node.js</span>
+          <span class="tag">数据库</span>
+          <span class="tag">Git</span>
+        </div>
+      </div>
+
+      <div class="sidebar-box">
+        <h3>快速链接</h3>
+        <ul class="links-list">
+          <li><a href="#">我的 GitHub</a></li>
+          <li><a href="#">技术博客</a></li>
+          <li><a href="#">项目作品</a></li>
+          <li><a href="#">简历下载</a></li>
+        </ul>
+      </div>
+    </aside>
+  </div>
+
+  <!-- 页脚 -->
+  <footer>
+    <p>© 2026 我的个人网站. All rights reserved.</p>
+    <p>Made with ❤️ by Developer</p>
+  </footer>
+
+  <!-- 右下角五子棋游戏容器 -->
+  <div class="gomoku-widget">
+    <button class="gomoku-toggle" onclick="toggleGomoku()">♟️</button>
+    <div class="gomoku-panel" id="gomokuPanel">
+      <div class="gomoku-header">
+        <h4>🎲 五子棋 - 人机对战</h4>
+        <button class="gomoku-close" onclick="toggleGomoku()">✕</button>
+      </div>
+      <div class="gomoku-content">
+        <div id="gomoku-container"></div>
+      </div>
+    </div>
+  </div>
+  <script src="gomoku.js"></script>
+  <script>
+    function toggleGomoku() {
+      document.getElementById('gomokuPanel').classList.toggle('show');
+      if (document.getElementById('gomokuPanel').classList.contains('show')) {
+        GomokuWidget.mount('gomoku-container');
+      }
+    }
+  </script>
+  
+</body>
+</html>
